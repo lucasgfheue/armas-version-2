@@ -89,6 +89,11 @@ public class AssaultRifleItem extends Item implements Gun {
         return true;
     }
 
+    /** Daño por bala (las variantes lo sobrescriben). */
+    protected float damage() {
+        return DAMAGE;
+    }
+
     private boolean hasAmmo(ServerPlayer player) {
         return player.getAbilities().instabuild || !AmmoUtil.find(player, ModItems.MUNICION_FUSIL.get()).isEmpty();
     }
@@ -103,7 +108,7 @@ public class AssaultRifleItem extends Item implements Gun {
         BulletUtil.Hit hit = BulletUtil.trace(level, player, eye, dir, RANGE);
         if (hit.entity() != null) {
             hit.entity().invulnerableTime = 0;   // permite una bala cada tick de disparo
-            hit.entity().hurt(level.damageSources().playerAttack(player), DAMAGE);
+            hit.entity().hurt(level.damageSources().playerAttack(player), damage());
         }
 
         BulletUtil.tracer(level, eye, dir, Math.min(hit.distance(), 40.0), 5.0);

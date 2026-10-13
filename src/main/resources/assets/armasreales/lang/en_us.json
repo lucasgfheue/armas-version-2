@@ -18,5 +18,9 @@
   "item.armasreales.escopeta": "Shotgun",
   "item.armasreales.cartucho_escopeta": "Shotgun Shell",
   "item.armasreales.fusil_asalto": "Assault Rifle",
-  "item.armasreales.municion_fusil": "Rifle Ammo"
+  "item.armasreales.municion_fusil": "Rifle Ammo",
+  "item.armasreales.cuchillo": "Throwing Knife",
+  "item.armasreales.fusil_dorado": "Golden Assault Rifle",
+  "item.armasreales.cabeza_zombi": "Zombie Head",
+  "entity.armasreales.cuchillo_arrojadizo": "Thrown Knife"
 }

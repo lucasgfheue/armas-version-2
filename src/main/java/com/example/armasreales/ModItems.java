@@ -77,4 +77,19 @@ public class ModItems {
             "municion_fusil",
             Item::new,
             new Item.Properties());
+
+    public static final DeferredItem<KnifeItem> CUCHILLO = ITEMS.registerItem(
+            "cuchillo",
+            KnifeItem::new,
+            new Item.Properties().stacksTo(16).attributes(KnifeItem.attributes()));
+
+    public static final DeferredItem<GoldenRifleItem> FUSIL_DORADO = ITEMS.registerItem(
+            "fusil_dorado",
+            GoldenRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(800));
+
+    public static final DeferredItem<ZombieHeadItem> CABEZA_ZOMBI = ITEMS.registerItem(
+            "cabeza_zombi",
+            ZombieHeadItem::new,
+            new Item.Properties().stacksTo(1).durability(250).attributes(ZombieHeadItem.attributes()));
 }

@@ -42,6 +42,14 @@ public class ModEntities {
                             .updateInterval(2)
                             .build("proyectil_acido"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<ThrownKnife>> KNIFE =
+            ENTITIES.register("cuchillo_arrojadizo", () ->
+                    EntityType.Builder.<ThrownKnife>of(ThrownKnife::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f)
+                            .clientTrackingRange(4)
+                            .updateInterval(20)
+                            .build("cuchillo_arrojadizo"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<BeamEntity>> BEAM =
             ENTITIES.register("rayo", () ->
                     EntityType.Builder.<BeamEntity>of(BeamEntity::new, MobCategory.MISC)

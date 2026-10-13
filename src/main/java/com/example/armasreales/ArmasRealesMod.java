@@ -37,6 +37,9 @@ public class ArmasRealesMod {
             event.accept(ModItems.CARTUCHO_ESCOPETA);
             event.accept(ModItems.FUSIL_ASALTO);
             event.accept(ModItems.MUNICION_FUSIL);
+            event.accept(ModItems.FUSIL_DORADO);
+            event.accept(ModItems.CUCHILLO);
+            event.accept(ModItems.CABEZA_ZOMBI);
         }
     }
 }

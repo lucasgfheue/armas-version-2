@@ -18,5 +18,9 @@
   "item.armasreales.escopeta": "Escopeta",
   "item.armasreales.cartucho_escopeta": "Cartucho de escopeta",
   "item.armasreales.fusil_asalto": "Fusil de asalto",
-  "item.armasreales.municion_fusil": "Munición de fusil"
+  "item.armasreales.municion_fusil": "Munición de fusil",
+  "item.armasreales.cuchillo": "Cuchillo arrojadizo",
+  "item.armasreales.fusil_dorado": "Fusil de asalto dorado",
+  "item.armasreales.cabeza_zombi": "Cabeza de zombi",
+  "entity.armasreales.cuchillo_arrojadizo": "Cuchillo arrojadizo"
 }

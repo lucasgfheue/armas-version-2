@@ -30,6 +30,9 @@ public class ClientSetup {
         // Rayos del láser y del plasma
         event.registerEntityRenderer(ModEntities.BEAM.get(), BeamRenderer::new);
 
+        // Cuchillo arrojadizo
+        event.registerEntityRenderer(ModEntities.KNIFE.get(), KnifeRenderer::new);
+
         // Dardo del taser (con brillo) y bola de ácido
         event.registerEntityRenderer(ModEntities.TASER_PROJECTILE.get(),
                 context -> new ThrownItemRenderer<>(context, 1.6F, true));
@@ -51,7 +54,7 @@ public class ClientSetup {
         event.registerItem(holdGun, ModItems.PISTOLA.get(), ModItems.RIFLE_LASER.get(),
                 ModItems.LANZADOR_TNT.get(), ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get(),
                 ModItems.TASER.get(), ModItems.PISTOLA_ACIDA.get(), ModItems.RIFLE_VIOLETA.get(),
-                ModItems.ESCOPETA.get(), ModItems.FUSIL_ASALTO.get());
+                ModItems.ESCOPETA.get(), ModItems.FUSIL_ASALTO.get(), ModItems.FUSIL_DORADO.get());
     }
 
     /** Propiedad "aiming": el modelo del arma cambia mientras apuntas (rotación para brazo levantado). */
@@ -62,7 +65,7 @@ public class ClientSetup {
             Item[] guns = {ModItems.PISTOLA.get(), ModItems.RIFLE_LASER.get(), ModItems.LANZADOR_TNT.get(),
                     ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get(),
                     ModItems.TASER.get(), ModItems.PISTOLA_ACIDA.get(), ModItems.RIFLE_VIOLETA.get(),
-                    ModItems.ESCOPETA.get(), ModItems.FUSIL_ASALTO.get()};
+                    ModItems.ESCOPETA.get(), ModItems.FUSIL_ASALTO.get(), ModItems.FUSIL_DORADO.get()};
             for (Item gun : guns) {
                 ItemProperties.register(gun, aiming, (stack, level, entity, seed) ->
                         entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);

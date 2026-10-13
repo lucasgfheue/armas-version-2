@@ -1,0 +1,334 @@
+{
+ "gui_light": "front",
+ "textures": {
+  "0": "armasreales:item/cabeza_zombi_3d",
+  "particle": "armasreales:item/cabeza_zombi_3d"
+ },
+ "elements": [
+  {
+   "from": [
+    4,
+    5,
+    4
+   ],
+   "to": [
+    12,
+    13,
+    12
+   ],
+   "faces": {
+    "east": {
+     "texture": "#0",
+     "uv": [
+      0,
+      0,
+      8,
+      8
+     ]
+    },
+    "west": {
+     "texture": "#0",
+     "uv": [
+      0,
+      8,
+      8,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#0",
+     "uv": [
+      8,
+      0,
+      16,
+      8
+     ]
+    },
+    "south": {
+     "texture": "#0",
+     "uv": [
+      8,
+      0,
+      16,
+      8
+     ]
+    },
+    "up": {
+     "texture": "#0",
+     "uv": [
+      0,
+      8,
+      8,
+      16
+     ]
+    },
+    "down": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      12
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    5,
+    2.5,
+    5
+   ],
+   "to": [
+    11,
+    5,
+    11
+   ],
+   "faces": {
+    "north": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      12
+     ]
+    },
+    "down": {
+     "texture": "#0",
+     "uv": [
+      8,
+      8,
+      12,
+      12
+     ]
+    }
+   }
+  },
+  {
+   "from": [
+    7,
+    0.5,
+    7
+   ],
+   "to": [
+    9,
+    2.5,
+    9
+   ],
+   "faces": {
+    "north": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    },
+    "east": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    },
+    "south": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    },
+    "west": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    },
+    "up": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    },
+    "down": {
+     "texture": "#0",
+     "uv": [
+      12,
+      8,
+      16,
+      12
+     ]
+    }
+   }
+  }
+ ],
+ "display": {
+  "thirdperson_righthand": {
+   "rotation": [
+    0,
+    -90,
+    0
+   ],
+   "translation": [
+    0,
+    3,
+    1
+   ],
+   "scale": [
+    0.7,
+    0.7,
+    0.7
+   ]
+  },
+  "thirdperson_lefthand": {
+   "rotation": [
+    0,
+    -90,
+    0
+   ],
+   "translation": [
+    0,
+    3,
+    1
+   ],
+   "scale": [
+    0.7,
+    0.7,
+    0.7
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    -90,
+    10
+   ],
+   "translation": [
+    0,
+    4,
+    0
+   ],
+   "scale": [
+    0.8,
+    0.8,
+    0.8
+   ]
+  },
+  "firstperson_lefthand": {
+   "rotation": [
+    0,
+    -90,
+    10
+   ],
+   "translation": [
+    0,
+    4,
+    0
+   ],
+   "scale": [
+    0.8,
+    0.8,
+    0.8
+   ]
+  },
+  "gui": {
+   "rotation": [
+    25,
+    -35,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    3,
+    0
+   ],
+   "scale": [
+    0.6,
+    0.6,
+    0.6
+   ]
+  },
+  "fixed": {
+   "rotation": [
+    0,
+    -90,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  }
+ }
+}
