@@ -57,4 +57,24 @@ public class ModItems {
             "rifle_violeta",
             VioletRifleItem::new,
             new Item.Properties().stacksTo(1).durability(250));
+
+    public static final DeferredItem<ShotgunItem> ESCOPETA = ITEMS.registerItem(
+            "escopeta",
+            ShotgunItem::new,
+            new Item.Properties().stacksTo(1).durability(250));
+
+    public static final DeferredItem<Item> CARTUCHO_ESCOPETA = ITEMS.registerItem(
+            "cartucho_escopeta",
+            Item::new,
+            new Item.Properties());
+
+    public static final DeferredItem<AssaultRifleItem> FUSIL_ASALTO = ITEMS.registerItem(
+            "fusil_asalto",
+            AssaultRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(400));
+
+    public static final DeferredItem<Item> MUNICION_FUSIL = ITEMS.registerItem(
+            "municion_fusil",
+            Item::new,
+            new Item.Properties());
 }

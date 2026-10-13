@@ -33,6 +33,10 @@ public class ArmasRealesMod {
             event.accept(ModItems.TASER);
             event.accept(ModItems.PISTOLA_ACIDA);
             event.accept(ModItems.RIFLE_VIOLETA);
+            event.accept(ModItems.ESCOPETA);
+            event.accept(ModItems.CARTUCHO_ESCOPETA);
+            event.accept(ModItems.FUSIL_ASALTO);
+            event.accept(ModItems.MUNICION_FUSIL);
         }
     }
 }

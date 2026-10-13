@@ -14,5 +14,9 @@
   "item.armasreales.pistola_acida": "Pistola de ácido",
   "item.armasreales.rifle_violeta": "Rifle láser violeta",
   "entity.armasreales.proyectil_taser": "Dardo eléctrico",
-  "entity.armasreales.proyectil_acido": "Bola de ácido"
+  "entity.armasreales.proyectil_acido": "Bola de ácido",
+  "item.armasreales.escopeta": "Escopeta",
+  "item.armasreales.cartucho_escopeta": "Cartucho de escopeta",
+  "item.armasreales.fusil_asalto": "Fusil de asalto",
+  "item.armasreales.municion_fusil": "Munición de fusil"
 }
