@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "armasreales"
+version = "0.1.0"
+displayName = "Armas Reales"
+description = '''
+Mod de armas realistas para Minecraft. Primera versión: una pistola con munición.
+'''
+
+[[dependencies.armasreales]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.armasreales]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.22)"
+ordering = "NONE"
+side = "BOTH"

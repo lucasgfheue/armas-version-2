@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " G ",
+    "IRI",
+    " G "
+  ],
+  "key": {
+    "G": { "item": "minecraft:glowstone_dust" },
+    "I": { "item": "minecraft:iron_ingot" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": { "id": "armasreales:celda_energia", "count": 2 }
+}

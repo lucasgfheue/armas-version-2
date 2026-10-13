@@ -1,0 +1,13 @@
+{
+  "item.armasreales.pistola": "Pistol",
+  "item.armasreales.municion_pistola": "Pistol Ammo",
+  "item.armasreales.rifle_laser": "Laser Rifle",
+  "item.armasreales.celda_energia": "Energy Cell",
+  "item.armasreales.lanzador_tnt": "TNT Launcher",
+  "item.armasreales.pistola_bengalas": "Flare Gun",
+  "item.armasreales.rifle_plasma": "Plasma Rifle",
+  "entity.armasreales.proyectil_tnt": "TNT Projectile",
+  "entity.armasreales.proyectil_bengala": "Flare",
+  "message.armasreales.sobrecalentado": "Overheated!",
+  "entity.armasreales.rayo": "Beam"
+}
