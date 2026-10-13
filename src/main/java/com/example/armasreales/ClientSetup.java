@@ -29,6 +29,12 @@ public class ClientSetup {
 
         // Rayos del láser y del plasma
         event.registerEntityRenderer(ModEntities.BEAM.get(), BeamRenderer::new);
+
+        // Dardo del taser (con brillo) y bola de ácido
+        event.registerEntityRenderer(ModEntities.TASER_PROJECTILE.get(),
+                context -> new ThrownItemRenderer<>(context, 1.6F, true));
+        event.registerEntityRenderer(ModEntities.ACID_PROJECTILE.get(),
+                context -> new ThrownItemRenderer<>(context, 2.2F, true));
     }
 
     /** Los brazos se levantan al frente, como al sostener una ballesta: se ve que sostiene el arma. */
@@ -43,7 +49,8 @@ public class ClientSetup {
             }
         };
         event.registerItem(holdGun, ModItems.PISTOLA.get(), ModItems.RIFLE_LASER.get(),
-                ModItems.LANZADOR_TNT.get(), ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get());
+                ModItems.LANZADOR_TNT.get(), ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get(),
+                ModItems.TASER.get(), ModItems.PISTOLA_ACIDA.get(), ModItems.RIFLE_VIOLETA.get());
     }
 
     /** Propiedad "aiming": el modelo del arma cambia mientras apuntas (rotación para brazo levantado). */
@@ -52,7 +59,8 @@ public class ClientSetup {
         event.enqueueWork(() -> {
             ResourceLocation aiming = ResourceLocation.fromNamespaceAndPath(ArmasRealesMod.MOD_ID, "aiming");
             Item[] guns = {ModItems.PISTOLA.get(), ModItems.RIFLE_LASER.get(), ModItems.LANZADOR_TNT.get(),
-                    ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get()};
+                    ModItems.PISTOLA_BENGALAS.get(), ModItems.RIFLE_PLASMA.get(),
+                    ModItems.TASER.get(), ModItems.PISTOLA_ACIDA.get(), ModItems.RIFLE_VIOLETA.get()};
             for (Item gun : guns) {
                 ItemProperties.register(gun, aiming, (stack, level, entity, seed) ->
                         entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);

@@ -42,4 +42,19 @@ public class ModItems {
             "rifle_plasma",
             PlasmaRifleItem::new,
             new Item.Properties().stacksTo(1).durability(300));
+
+    public static final DeferredItem<TaserItem> TASER = ITEMS.registerItem(
+            "taser",
+            TaserItem::new,
+            new Item.Properties().stacksTo(1).durability(200));
+
+    public static final DeferredItem<AcidPistolItem> PISTOLA_ACIDA = ITEMS.registerItem(
+            "pistola_acida",
+            AcidPistolItem::new,
+            new Item.Properties().stacksTo(1).durability(200));
+
+    public static final DeferredItem<VioletRifleItem> RIFLE_VIOLETA = ITEMS.registerItem(
+            "rifle_violeta",
+            VioletRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(250));
 }

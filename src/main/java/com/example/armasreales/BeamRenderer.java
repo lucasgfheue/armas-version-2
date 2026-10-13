@@ -54,14 +54,25 @@ public class BeamRenderer extends EntityRenderer<BeamEntity> {
     @Override
     public void render(BeamEntity beam, float yaw, float partialTick, PoseStack poseStack,
                        MultiBufferSource buffer, int light) {
-        Entity owner = beam.level().getEntity(beam.getOwnerId());
         float length = beam.getLength();
-        if (owner == null || length < 0.5f) {
+        boolean fixed = beam.getStyle() == BeamEntity.STYLE_VIOLET;
+        Vec3 eye;
+        Vec3 look;
+        if (fixed) {
+            // Disparo único: sale del punto y la dirección en que se disparó
+            eye = beam.getPosition(partialTick);
+            look = Vec3.directionFromRotation(beam.getXRot(), beam.getYRot());
+        } else {
+            Entity owner = beam.level().getEntity(beam.getOwnerId());
+            if (owner == null) {
+                return;
+            }
+            eye = owner.getEyePosition(partialTick);
+            look = owner.getViewVector(partialTick);
+        }
+        if (length < 0.5f) {
             return;
         }
-
-        Vec3 eye = owner.getEyePosition(partialTick);
-        Vec3 look = owner.getViewVector(partialTick);
         Vec3 right = look.cross(new Vec3(0, 1, 0));
         right = right.lengthSqr() < 1.0E-6 ? new Vec3(1, 0, 0) : right.normalize();
 
@@ -77,6 +88,8 @@ public class BeamRenderer extends EntityRenderer<BeamEntity> {
 
         if (beam.getStyle() == BeamEntity.STYLE_PLASMA) {
             drawPlasma(vc, m, a, b, beam);
+        } else if (beam.getStyle() == BeamEntity.STYLE_VIOLET) {
+            drawViolet(vc, m, a, b, time);
         } else {
             drawLaser(vc, m, a, b, time);
         }
@@ -91,6 +104,16 @@ public class BeamRenderer extends EntityRenderer<BeamEntity> {
         tube(vc, m, a, b, 0.070 * pulse, 1.0f, 0.00f, 0.00f, 0.20f);  // halo
         cube(vc, m, b, 0.11 * pulse, 1.0f, 0.35f, 0.25f, 0.60f);      // punto de impacto
         cube(vc, m, a, 0.05, 1.0f, 0.30f, 0.20f, 0.60f);              // boca del arma
+    }
+
+    /** Láser violeta: igual que el rojo pero morado, más grueso, y se desvanece tras el disparo. */
+    private void drawViolet(VertexConsumer vc, Matrix4f m, Vec3 a, Vec3 b, float time) {
+        float fade = Mth.clamp(1.0f - time / 9.0f, 0.15f, 1.0f);
+        float pulse = 1.0f + 0.1f * Mth.sin(time * 1.7f);
+        tube(vc, m, a, b, 0.020 * pulse, 0.97f, 0.88f, 1.0f, 0.95f * fade);   // núcleo casi blanco
+        tube(vc, m, a, b, 0.050 * pulse, 0.62f, 0.20f, 1.0f, 0.55f * fade);   // violeta intenso
+        tube(vc, m, a, b, 0.110 * pulse, 0.45f, 0.00f, 0.95f, 0.22f * fade);  // halo
+        cube(vc, m, a, 0.07, 0.75f, 0.40f, 1.0f, 0.65f * fade);               // boca del arma
     }
 
     // ------------------------------------------------------------------ Plasma eléctrico

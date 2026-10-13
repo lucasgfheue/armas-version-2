@@ -9,5 +9,10 @@
   "entity.armasreales.proyectil_tnt": "TNT Projectile",
   "entity.armasreales.proyectil_bengala": "Flare",
   "message.armasreales.sobrecalentado": "Overheated!",
-  "entity.armasreales.rayo": "Beam"
+  "entity.armasreales.rayo": "Beam",
+  "item.armasreales.taser": "Taser",
+  "item.armasreales.pistola_acida": "Acid Pistol",
+  "item.armasreales.rifle_violeta": "Violet Laser Rifle",
+  "entity.armasreales.proyectil_taser": "Electric Dart",
+  "entity.armasreales.proyectil_acido": "Acid Ball"
 }

@@ -30,6 +30,9 @@ public class ArmasRealesMod {
             event.accept(ModItems.LANZADOR_TNT);
             event.accept(ModItems.PISTOLA_BENGALAS);
             event.accept(ModItems.RIFLE_PLASMA);
+            event.accept(ModItems.TASER);
+            event.accept(ModItems.PISTOLA_ACIDA);
+            event.accept(ModItems.RIFLE_VIOLETA);
         }
     }
 }

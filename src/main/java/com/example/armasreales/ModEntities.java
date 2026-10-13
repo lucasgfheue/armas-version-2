@@ -26,6 +26,22 @@ public class ModEntities {
                             .updateInterval(2)
                             .build("proyectil_bengala"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<TaserProjectile>> TASER_PROJECTILE =
+            ENTITIES.register("proyectil_taser", () ->
+                    EntityType.Builder.<TaserProjectile>of(TaserProjectile::new, MobCategory.MISC)
+                            .sized(0.3f, 0.3f)
+                            .clientTrackingRange(8)
+                            .updateInterval(1)
+                            .build("proyectil_taser"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<AcidProjectile>> ACID_PROJECTILE =
+            ENTITIES.register("proyectil_acido", () ->
+                    EntityType.Builder.<AcidProjectile>of(AcidProjectile::new, MobCategory.MISC)
+                            .sized(0.4f, 0.4f)
+                            .clientTrackingRange(8)
+                            .updateInterval(2)
+                            .build("proyectil_acido"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<BeamEntity>> BEAM =
             ENTITIES.register("rayo", () ->
                     EntityType.Builder.<BeamEntity>of(BeamEntity::new, MobCategory.MISC)

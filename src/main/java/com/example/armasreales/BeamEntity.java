@@ -22,8 +22,12 @@ import java.util.UUID;
 public class BeamEntity extends Entity {
     public static final int STYLE_LASER = 0;
     public static final int STYLE_PLASMA = 1;
+    public static final int STYLE_VIOLET = 2;
 
     private static final Map<UUID, BeamEntity> ACTIVE = new HashMap<>();
+
+    /** Ticks que le quedan a un rayo temporal (disparo único). -1 = rayo continuo. */
+    private int ttl = -1;
 
     private static final EntityDataAccessor<Integer> OWNER_ID =
             SynchedEntityData.defineId(BeamEntity.class, EntityDataSerializers.INT);
@@ -51,10 +55,29 @@ public class BeamEntity extends Entity {
         beam.setLength(length);
     }
 
+    /** Rayo de un solo disparo: queda fijo en la dirección del disparo y se apaga solo. */
+    public static void flash(ServerLevel level, Player player, int style, float length, int ticks) {
+        BeamEntity beam = new BeamEntity(ModEntities.BEAM.get(), level);
+        beam.setOwnerId(player.getId());
+        beam.setPos(player.getX(), player.getEyeY(), player.getZ());
+        beam.setYRot(player.getYRot());
+        beam.setXRot(player.getXRot());
+        beam.setStyle(style);
+        beam.setLength(length);
+        beam.ttl = ticks;
+        level.addFreshEntity(beam);
+    }
+
     @Override
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
+            return;
+        }
+        if (this.ttl >= 0) {
+            if (this.ttl-- <= 0) {
+                this.discard();
+            }
             return;
         }
         Entity owner = this.level().getEntity(this.getOwnerId());

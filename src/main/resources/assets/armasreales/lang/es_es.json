@@ -9,5 +9,10 @@
   "entity.armasreales.proyectil_tnt": "Proyectil de TNT",
   "entity.armasreales.proyectil_bengala": "Bengala",
   "message.armasreales.sobrecalentado": "¡Sobrecalentado!",
-  "entity.armasreales.rayo": "Rayo"
+  "entity.armasreales.rayo": "Rayo",
+  "item.armasreales.taser": "Taser",
+  "item.armasreales.pistola_acida": "Pistola de ácido",
+  "item.armasreales.rifle_violeta": "Rifle láser violeta",
+  "entity.armasreales.proyectil_taser": "Dardo eléctrico",
+  "entity.armasreales.proyectil_acido": "Bola de ácido"
 }
