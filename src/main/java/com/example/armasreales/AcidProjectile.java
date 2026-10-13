@@ -14,6 +14,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.joml.Vector3f;
@@ -21,7 +22,10 @@ import org.joml.Vector3f;
 /** Bola de ácido: al golpear a una entidad le aplica Wither durante 5 segundos. */
 public class AcidProjectile extends ThrowableItemProjectile {
     private static final float DAMAGE = 2.0f;
-    private static final int WITHER_TICKS = 100;   // 5 segundos
+    private static final int WITHER_TICKS = 200;   // 10 segundos
+    private static final int WITHER_AMPLIFIER = 2; // Wither III
+    private static final float EXPLOSION_POWER = 1.5f;   // explosión pequeña (el creeper es 3.0)
+    private static final double SPLASH_RADIUS = 3.0;
     private static final int MAX_LIFE_TICKS = 100;
 
     private static final DustParticleOptions ACID_DUST =
@@ -64,8 +68,27 @@ public class AcidProjectile extends ThrowableItemProjectile {
         Entity target = result.getEntity();
         target.hurt(this.damageSources().thrown(this, this.getOwner()), DAMAGE);
         if (target instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.WITHER, WITHER_TICKS, 0), this.getOwner());
+            applyWither(living);
         }
+
+        // Explota al golpear a una entidad: afecta a las de alrededor pero NO rompe bloques
+        if (this.level() instanceof ServerLevel level) {
+            level.explode(this, getX(), getY(0.5), getZ(), EXPLOSION_POWER, Level.ExplosionInteraction.NONE);
+
+            AABB area = this.getBoundingBox().inflate(SPLASH_RADIUS);
+            for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, area,
+                    e -> e != target && e != this.getOwner() && e.isAlive() && !e.isSpectator())) {
+                if (other.distanceToSqr(this) <= SPLASH_RADIUS * SPLASH_RADIUS) {
+                    applyWither(other);
+                }
+            }
+            level.sendParticles(ACID_DUST, getX(), getY(0.5), getZ(), 40, SPLASH_RADIUS * 0.4,
+                    SPLASH_RADIUS * 0.3, SPLASH_RADIUS * 0.4, 0.0);
+        }
+    }
+
+    private void applyWither(LivingEntity living) {
+        living.addEffect(new MobEffectInstance(MobEffects.WITHER, WITHER_TICKS, WITHER_AMPLIFIER), this.getOwner());
     }
 
     @Override
