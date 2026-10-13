@@ -19,11 +19,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.joml.Vector3f;
 
-/** Bola de ácido: al golpear a una entidad le aplica Wither durante 5 segundos. */
+/** Bola de ácido: explota al chocar (contra entidad o bloque) y aplica Wither II durante 7 segundos. */
 public class AcidProjectile extends ThrowableItemProjectile {
     private static final float DAMAGE = 2.0f;
-    private static final int WITHER_TICKS = 200;   // 10 segundos
-    private static final int WITHER_AMPLIFIER = 2; // Wither III
+    private static final int WITHER_TICKS = 140;   // 7 segundos
+    private static final int WITHER_AMPLIFIER = 1; // Wither II
     private static final float EXPLOSION_POWER = 1.5f;   // explosión pequeña (el creeper es 3.0)
     private static final double SPLASH_RADIUS = 3.0;
     private static final int MAX_LIFE_TICKS = 100;
@@ -70,21 +70,24 @@ public class AcidProjectile extends ThrowableItemProjectile {
         if (target instanceof LivingEntity living) {
             applyWither(living);
         }
+    }
 
-        // Explota al golpear a una entidad: afecta a las de alrededor pero NO rompe bloques
-        if (this.level() instanceof ServerLevel level) {
-            level.explode(this, getX(), getY(0.5), getZ(), EXPLOSION_POWER, Level.ExplosionInteraction.NONE);
-
-            AABB area = this.getBoundingBox().inflate(SPLASH_RADIUS);
-            for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, area,
-                    e -> e != target && e != this.getOwner() && e.isAlive() && !e.isSpectator())) {
-                if (other.distanceToSqr(this) <= SPLASH_RADIUS * SPLASH_RADIUS) {
-                    applyWither(other);
-                }
-            }
-            level.sendParticles(ACID_DUST, getX(), getY(0.5), getZ(), 40, SPLASH_RADIUS * 0.4,
-                    SPLASH_RADIUS * 0.3, SPLASH_RADIUS * 0.4, 0.0);
+    /** Explosión pequeña SIN romper bloques; el Wither alcanza a todas las entidades cercanas. */
+    private void detonate(Entity directTarget) {
+        if (!(this.level() instanceof ServerLevel level)) {
+            return;
         }
+        level.explode(this, getX(), getY(0.5), getZ(), EXPLOSION_POWER, Level.ExplosionInteraction.NONE);
+
+        AABB area = this.getBoundingBox().inflate(SPLASH_RADIUS);
+        for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, area,
+                e -> e != directTarget && e != this.getOwner() && e.isAlive() && !e.isSpectator())) {
+            if (other.distanceToSqr(this) <= SPLASH_RADIUS * SPLASH_RADIUS) {
+                applyWither(other);
+            }
+        }
+        level.sendParticles(ACID_DUST, getX(), getY(0.5), getZ(), 40, SPLASH_RADIUS * 0.4,
+                SPLASH_RADIUS * 0.3, SPLASH_RADIUS * 0.4, 0.0);
     }
 
     private void applyWither(LivingEntity living) {
@@ -97,6 +100,7 @@ public class AcidProjectile extends ThrowableItemProjectile {
         if (this.level().isClientSide) {
             return;
         }
+        detonate(result instanceof EntityHitResult ehr ? ehr.getEntity() : null);
         if (this.level() instanceof ServerLevel level) {
             level.sendParticles(ACID_DUST, getX(), getY(0.5), getZ(), 30, 0.5, 0.5, 0.5, 0.0);
             level.sendParticles(ParticleTypes.ITEM_SLIME, getX(), getY(0.5), getZ(), 20, 0.4, 0.4, 0.4, 0.05);

@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 /** Taser semiautomático: un dardo eléctrico por clic que paraliza 5 segundos. Usa Celdas de energía. */
 public class TaserItem extends Item implements Gun {
-    private static final int COOLDOWN_TICKS = 80;
+    private static final int COOLDOWN_TICKS = 600;   // 30 segundos
     private static final float SPEED = 3.0f;
 
     public TaserItem(Properties properties) {
