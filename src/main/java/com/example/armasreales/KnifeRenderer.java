@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +15,11 @@ import net.minecraft.world.item.ItemStack;
 
 /** Dibuja el cuchillo (modelo 3D del ítem) apuntando hacia donde vuela y girando en el aire. */
 public class KnifeRenderer extends EntityRenderer<ThrownKnife> {
+    private final ItemRenderer itemRenderer;
+
     public KnifeRenderer(EntityRendererProvider.Context context) {
         super(context);
+        this.itemRenderer = context.getItemRenderer();
     }
 
     @Override
@@ -31,7 +35,7 @@ public class KnifeRenderer extends EntityRenderer<ThrownKnife> {
         }
         poseStack.scale(1.4F, 1.4F, 1.4F);
 
-        this.entityRenderDispatcher.getItemRenderer().renderStatic(
+        this.itemRenderer.renderStatic(
                 new ItemStack(ModItems.CUCHILLO.get()), ItemDisplayContext.NONE, light,
                 OverlayTexture.NO_OVERLAY, poseStack, buffer, knife.level(), knife.getId());
         poseStack.popPose();
