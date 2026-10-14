@@ -1,0 +1,118 @@
+package com.example.armasreales;
+
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public class ModItems {
+    public static final DeferredRegister.Items ITEMS =
+            DeferredRegister.createItems(ArmasRealesMod.MOD_ID);
+
+    public static final DeferredItem<PistolItem> PISTOLA = ITEMS.registerItem(
+            "pistola",
+            PistolItem::new,
+            new Item.Properties().stacksTo(1).durability(500));
+
+    public static final DeferredItem<Item> MUNICION_PISTOLA = ITEMS.registerItem(
+            "municion_pistola",
+            Item::new,
+            new Item.Properties());
+
+    public static final DeferredItem<LaserRifleItem> RIFLE_LASER = ITEMS.registerItem(
+            "rifle_laser",
+            LaserRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(400));
+
+    public static final DeferredItem<Item> CELDA_ENERGIA = ITEMS.registerItem(
+            "celda_energia",
+            Item::new,
+            new Item.Properties());
+
+    public static final DeferredItem<TntLauncherItem> LANZADOR_TNT = ITEMS.registerItem(
+            "lanzador_tnt",
+            TntLauncherItem::new,
+            new Item.Properties().stacksTo(1).durability(150));
+
+    public static final DeferredItem<FlareGunItem> PISTOLA_BENGALAS = ITEMS.registerItem(
+            "pistola_bengalas",
+            FlareGunItem::new,
+            new Item.Properties().stacksTo(1).durability(120));
+
+    public static final DeferredItem<PlasmaRifleItem> RIFLE_PLASMA = ITEMS.registerItem(
+            "rifle_plasma",
+            PlasmaRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(300));
+
+    public static final DeferredItem<TaserItem> TASER = ITEMS.registerItem(
+            "taser",
+            TaserItem::new,
+            new Item.Properties().stacksTo(1).durability(200));
+
+    public static final DeferredItem<AcidPistolItem> PISTOLA_ACIDA = ITEMS.registerItem(
+            "pistola_acida",
+            AcidPistolItem::new,
+            new Item.Properties().stacksTo(1).durability(200));
+
+    public static final DeferredItem<VioletRifleItem> RIFLE_VIOLETA = ITEMS.registerItem(
+            "rifle_violeta",
+            VioletRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(250));
+
+    public static final DeferredItem<ShotgunItem> ESCOPETA = ITEMS.registerItem(
+            "escopeta",
+            ShotgunItem::new,
+            new Item.Properties().stacksTo(1).durability(250));
+
+    public static final DeferredItem<Item> CARTUCHO_ESCOPETA = ITEMS.registerItem(
+            "cartucho_escopeta",
+            Item::new,
+            new Item.Properties());
+
+    public static final DeferredItem<AssaultRifleItem> FUSIL_ASALTO = ITEMS.registerItem(
+            "fusil_asalto",
+            AssaultRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(400));
+
+    public static final DeferredItem<Item> MUNICION_FUSIL = ITEMS.registerItem(
+            "municion_fusil",
+            Item::new,
+            new Item.Properties());
+
+    public static final DeferredItem<KnifeItem> CUCHILLO = ITEMS.registerItem(
+            "cuchillo",
+            KnifeItem::new,
+            new Item.Properties().stacksTo(16).attributes(KnifeItem.attributes()));
+
+    public static final DeferredItem<GoldenRifleItem> FUSIL_DORADO = ITEMS.registerItem(
+            "fusil_dorado",
+            GoldenRifleItem::new,
+            new Item.Properties().stacksTo(1).durability(800));
+
+    public static final DeferredItem<ZombieHeadItem> CABEZA_ZOMBI = ITEMS.registerItem(
+            "cabeza_zombi",
+            ZombieHeadItem::new,
+            new Item.Properties().stacksTo(1).durability(250).attributes(ZombieHeadItem.attributes()));
+
+    /** Ítems "ocultos": solo existen para dar modelo 3D a la locomotora y al vagón del tren. */
+    public static final DeferredItem<Item> TREN_LOCOMOTORA = ITEMS.registerItem(
+            "tren_locomotora", Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TREN_VAGON = ITEMS.registerItem(
+            "tren_vagon", Item::new, new Item.Properties());
+
+    public static final DeferredItem<TankItem> TANQUE = ITEMS.registerItem(
+            "tanque", TankItem::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> OBUS = ITEMS.registerItem(
+            "obus", Item::new, new Item.Properties());
+
+    /** Ítems "ocultos": solo existen para dar modelo 3D al casco, la torreta y el cañón del tanque. */
+    public static final DeferredItem<Item> TANQUE_CASCO = ITEMS.registerItem(
+            "tanque_casco", Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TANQUE_TORRETA = ITEMS.registerItem(
+            "tanque_torreta", Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TANQUE_CANON = ITEMS.registerItem(
+            "tanque_canon", Item::new, new Item.Properties());
+}
