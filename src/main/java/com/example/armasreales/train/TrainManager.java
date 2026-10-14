@@ -11,22 +11,25 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * Hace pasar un tren cada 10 minutos (12000 ticks) por la estación: llega por una de las cuatro
- * vías, se detiene 15 segundos y sigue hacia la aldea del otro lado. Solo aparece si hay un
- * jugador cerca de la estación, y desaparece cuando nadie lo tiene cerca.
+ * Hace pasar un tren (cada 10 minutos por jugador) por cualquier punto de las vías donde haya
+ * alguien caminando: aparece a unos 50-110 bloques, viene hacia el jugador y lo pasa de largo.
+ * Si la estación queda por delante, se detiene ahí 15 segundos. Desaparece cuando nadie lo tiene cerca.
  */
 public final class TrainManager {
-    private static final int INTERVAL_TICKS = 12000;
-    private static final int FIRST_TICK = 1200;      // primer tren a 1 minuto de arrancar el mundo
-    private static final int SPAWN_WINDOW = 1200;    // reintenta durante 1 minuto si nadie está cerca
-    private static final int CARS = 5;               // locomotora + 4 vagones
+    private static final int INTERVAL_TICKS = 12000;   // un tren por jugador cada 10 minutos
+    private static final int FIRST_DELAY = 600;        // 30 s después de pisar las vías por primera vez
+    private static final int CARS = 5;                 // locomotora + 4 vagones
     private static final double SPACING = 6.0;
-    private static final double START_DIST = 80.0;   // a cuántos bloques de la estación aparece
     private static final double FAR = 1_000_000.0;
+    private static final double NEAR_RAIL = 8.0;       // a cuántos bloques de la vía cuenta "estar en las vías"
+    private static final double[] START_DISTANCES = {110, 90, 70, 50};
 
     private static final double MAX_SPEED = 0.85;    // bloques por tick (~17 bloques/s)
     private static final double ACCEL = 0.012;
@@ -36,23 +39,29 @@ public final class TrainManager {
     private static final double HIT_DAMAGE = 10.0;
 
     private static final List<Train> TRAINS = new ArrayList<>();
-    private static long lastCycle = -1;
+    private static final Map<UUID, Long> NEXT_TRAIN = new HashMap<>();
 
     private TrainManager() {
     }
 
     public static void clear() {
         TRAINS.clear();
-        lastCycle = -1;
+        NEXT_TRAIN.clear();
     }
 
     public static void tick(ServerLevel level, RailData data) {
         long t = level.getGameTime();
-        long cycle = t / INTERVAL_TICKS;
-        long phase = t % INTERVAL_TICKS;
-        if (cycle != lastCycle && phase >= FIRST_TICK && phase < FIRST_TICK + SPAWN_WINDOW && phase % 20 == 0) {
-            if (trySpawn(level, data, cycle)) {
-                lastCycle = cycle;
+        if (t % 20 == 0) {
+            List<TrainPath> lines = null;
+            for (ServerPlayer p : level.players()) {
+                if (p.isSpectator() || p.getVehicle() != null
+                        || Math.abs(p.getY() - (data.deckY + 1)) > 10) {
+                    continue;
+                }
+                if (lines == null) {
+                    lines = buildLines(data);
+                }
+                trySpawnFor(level, data, p, lines, t);
             }
         }
         Iterator<Train> it = TRAINS.iterator();
@@ -65,66 +74,113 @@ public final class TrainManager {
         }
     }
 
-    private static boolean trySpawn(ServerLevel level, RailData data, long cycle) {
-        boolean someoneNear = false;
-        for (ServerPlayer p : level.players()) {
-            if (Math.hypot(p.getX() - data.sx, p.getZ() - data.sz) < 160) {
-                someoneNear = true;
-                break;
+    /** Las 4 líneas completas (de un extremo infinito al otro, pasando por la estación). */
+    private static List<TrainPath> buildLines(RailData data) {
+        List<TrainPath> lines = new ArrayList<>();
+        for (int tz : new int[]{data.sz - 2, data.sz + 2}) {
+            RailData.Route west = null, east = null;
+            for (RailData.Route r : data.routes) {
+                if (r.tz() == tz) {
+                    if (r.side() < 0) west = r; else east = r;
+                }
+            }
+            if (west == null || east == null) {
+                continue;
+            }
+            List<double[]> pts = new ArrayList<>();
+            if (west.hasLeg2()) {
+                pts.add(new double[]{west.cx(), tz + Math.signum(west.ez() - tz) * FAR});
+                pts.add(new double[]{west.cx(), tz});
+            } else {
+                pts.add(new double[]{data.sx - FAR, tz});
+            }
+            pts.add(new double[]{data.sx, tz});
+            if (east.hasLeg2()) {
+                pts.add(new double[]{east.cx(), tz});
+                pts.add(new double[]{east.cx(), tz + Math.signum(east.ez() - tz) * FAR});
+            } else {
+                pts.add(new double[]{data.sx + FAR, tz});
+            }
+            lines.add(new TrainPath(pts, data.sx, tz));
+        }
+        return lines;
+    }
+
+    private static void trySpawnFor(ServerLevel level, RailData data, ServerPlayer player,
+                                    List<TrainPath> lines, long now) {
+        // ¿está el jugador sobre (o junto a) alguna vía?
+        TrainPath line = null;
+        double s0 = 0;
+        double best = NEAR_RAIL;
+        for (TrainPath candidate : lines) {
+            double[] pr = candidate.project(player.getX(), player.getZ());
+            if (pr[1] <= best) {
+                best = pr[1];
+                line = candidate;
+                s0 = pr[0];
             }
         }
-        if (!someoneNear) {
-            return false;
+        if (line == null) {
+            return;
         }
 
-        int idx = (int) (cycle % 4);
-        int trackZ = (idx % 2 == 0) ? data.sz - 2 : data.sz + 2;
-        int arrive = (idx == 0 || idx == 3) ? 1 : -1;
-
-        RailData.Route out = null;
-        for (RailData.Route r : data.routes) {
-            if (r.side() == -arrive && r.tz() == trackZ) {
-                out = r;
-            }
+        Long next = NEXT_TRAIN.get(player.getUUID());
+        if (next == null) {
+            NEXT_TRAIN.put(player.getUUID(), now + FIRST_DELAY);
+            return;
         }
-        if (out == null) {
-            return false;
+        if (now < next) {
+            return;
         }
-
-        List<double[]> pts = new ArrayList<>();
-        pts.add(new double[]{data.sx + arrive * START_DIST, trackZ});
-        pts.add(new double[]{data.sx, trackZ});
-        if (out.hasLeg2()) {
-            pts.add(new double[]{out.cx(), trackZ});
-            pts.add(new double[]{out.cx(), trackZ + Math.signum(out.ez() - out.tz()) * FAR});
-        } else {
-            pts.add(new double[]{data.sx - arrive * FAR, trackZ});
-        }
-        TrainPath path = new TrainPath(pts);
-
-        // todos los coches deben caer en chunks ya cargados
-        for (int i = 0; i < CARS; i++) {
-            double[] p = path.at(-i * SPACING);
-            if (!level.hasChunkAt(BlockPos.containing(p[0], data.deckY, p[1]))) {
-                return false;
+        // ya hay un tren cerca de este jugador
+        for (Train train : TRAINS) {
+            TrainCar head = train.cars.get(0);
+            if (Math.hypot(head.getX() - player.getX(), head.getZ() - player.getZ()) < 300) {
+                return;
             }
         }
 
-        List<TrainCar> cars = new ArrayList<>();
-        for (int i = 0; i < CARS; i++) {
-            TrainCar car = new TrainCar(ModEntities.TRAIN_CAR.get(), level);
-            car.setKind(i == 0 ? TrainCar.LOCOMOTIVE : TrainCar.WAGON);
-            double[] p = path.at(-i * SPACING);
-            car.setPos(p[0], data.deckY + 1.125, p[1]);
-            level.addFreshEntity(car);
-            cars.add(car);
+        boolean forward = level.random.nextBoolean();
+        TrainPath path = forward ? line : line.reversed();
+        double sPlayer = forward ? s0 : path.length() - s0;
+        double stationS = path.stationS;
+
+        for (double dist : START_DISTANCES) {
+            double sHead = sPlayer - dist;
+            boolean loaded = true;
+            for (int i = 0; i < CARS && loaded; i++) {
+                double[] p = path.at(sHead - i * SPACING);
+                loaded = level.hasChunkAt(BlockPos.containing(p[0], data.deckY, p[1]));
+            }
+            if (!loaded) {
+                continue;
+            }
+            // no aparecer encima del jugador
+            double[] hp = path.at(sHead);
+            if (Math.hypot(hp[0] - player.getX(), hp[1] - player.getZ()) < 30) {
+                continue;
+            }
+
+            List<TrainCar> cars = new ArrayList<>();
+            for (int i = 0; i < CARS; i++) {
+                TrainCar car = new TrainCar(ModEntities.TRAIN_CAR.get(), level);
+                car.setKind(i == 0 ? TrainCar.LOCOMOTIVE : TrainCar.WAGON);
+                double[] p = path.at(sHead - i * SPACING);
+                car.setPos(p[0], data.deckY + 1.125, p[1]);
+                level.addFreshEntity(car);
+                cars.add(car);
+            }
+            double stopS = stationS + (CARS / 2) * SPACING;
+            boolean stationAhead = stopS > sHead + 20;
+            Train train = new Train(cars, path, sHead, stationAhead ? stopS : Double.MAX_VALUE,
+                    stationAhead ? Phase.APPROACH : Phase.DEPART);
+            train.place(data);
+            TRAINS.add(train);
+            level.playSound(null, BlockPos.containing(hp[0], data.deckY, hp[1]),
+                    SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, 3.0f, 0.5f);
+            NEXT_TRAIN.put(player.getUUID(), now + INTERVAL_TICKS);
+            return;
         }
-        Train train = new Train(cars, path, START_DIST + (CARS / 2) * SPACING);
-        train.place(data);
-        TRAINS.add(train);
-        level.playSound(null, BlockPos.containing(data.sx, data.deckY, data.sz),
-                SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, 3.0f, 0.5f);
-        return true;
     }
 
     // ------------------------------------------------------------------
@@ -135,17 +191,19 @@ public final class TrainManager {
         final List<TrainCar> cars;
         final TrainPath path;
         final double stopS;
-        double s = 0.0;           // posición de la locomotora sobre el trazado
+        double s;                 // posición de la locomotora sobre el trazado
         double v = MAX_SPEED;
-        Phase phase = Phase.APPROACH;
+        Phase phase;
         int dwell;
         int lonely;               // ticks seguidos sin jugadores cerca
         int age;
 
-        Train(List<TrainCar> cars, TrainPath path, double stopS) {
+        Train(List<TrainCar> cars, TrainPath path, double startS, double stopS, Phase phase) {
             this.cars = cars;
             this.path = path;
+            this.s = startS;
             this.stopS = stopS;
+            this.phase = phase;
         }
 
         void discard() {
