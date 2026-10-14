@@ -116,7 +116,7 @@ public final class RailBuilder {
             }
             case STATION -> buildStationColumn(level, x, y, z, plan.a, plan.b);
             case HALT -> {
-                if (Math.abs(plan.a) == 2 && (plan.b == 1 || plan.b == 7)) {
+                if (Math.abs(plan.a) == 2 && plan.b == 4) {
                     set(level, x, y + 1, z, Blocks.STONE_BRICKS.defaultBlockState());
                     set(level, x, y + 2, z, Blocks.STONE_BRICKS.defaultBlockState());
                     set(level, x, y + 3, z, Blocks.LANTERN.defaultBlockState());

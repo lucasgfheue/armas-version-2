@@ -85,32 +85,36 @@ public class RailData extends SavedData {
         return Math.abs(x - sx) <= 16 && Math.abs(z - sz) <= 7;
     }
 
-    /** Rectángulos {x0, z0, x1, z1} donde puede haber algo construido. */
+    public static final int INF = 29_999_000;
+
+    /** Rectángulos {x0, z0, x1, z1} donde puede haber algo construido (las vías no tienen fin). */
     public List<int[]> rects() {
         List<int[]> out = new ArrayList<>();
         out.add(new int[]{sx - 16, sz - 7, sx + 16, sz + 7});
         for (Route r : routes) {
-            out.add(new int[]{Math.min(sx, r.cx()), r.tz(), Math.max(sx, r.cx()), r.tz()});
             if (r.hasLeg2()) {
-                out.add(new int[]{r.cx(), Math.min(r.tz(), r.ez()), r.cx(), Math.max(r.tz(), r.ez())});
+                out.add(new int[]{Math.min(sx, r.cx()), r.tz(), Math.max(sx, r.cx()), r.tz()});
+                if (r.ez() > r.tz()) {
+                    out.add(new int[]{r.cx(), r.tz(), r.cx(), INF});
+                } else {
+                    out.add(new int[]{r.cx(), -INF, r.cx(), r.tz()});
+                }
+            } else if (r.side() > 0) {
+                out.add(new int[]{sx, r.tz(), INF, r.tz()});
+            } else {
+                out.add(new int[]{-INF, r.tz(), sx, r.tz()});
             }
-            int[] h = haltRect(r);
-            out.add(h);
+            out.add(haltRect(r));
         }
         return out;
     }
 
-    /** Andén de la parada final (incluye el tope). */
+    /** Parada de paso junto a la aldea (la vía sigue de largo). */
     public static int[] haltRect(Route r) {
         if (r.hasLeg2()) {
-            int d = Integer.signum(r.ez() - r.tz());
-            int a = r.ez() - 8 * d;
-            int b = r.ez() + 2 * d;
-            return new int[]{r.cx() - 2, Math.min(a, b), r.cx() + 2, Math.max(a, b)};
+            return new int[]{r.cx() - 2, r.ez() - 8, r.cx() + 2, r.ez() + 8};
         }
-        int a = r.cx() - 8 * r.side();
-        int b = r.cx() + 2 * r.side();
-        return new int[]{Math.min(a, b), r.tz() - 2, Math.max(a, b), r.tz() + 2};
+        return new int[]{r.cx() - 8, r.tz() - 2, r.cx() + 8, r.tz() + 2};
     }
 
     public boolean chunkRelevant(int chunkX, int chunkZ) {
@@ -144,10 +148,13 @@ public class RailData extends SavedData {
 
     public Plan plan(int x, int z) {
         for (Route r : routes) {
-            int minX = Math.min(sx, r.cx()), maxX = Math.max(sx, r.cx());
-            boolean leg1 = z == r.tz() && x >= minX && x <= maxX;
-            boolean leg2 = r.hasLeg2() && x == r.cx()
-                    && z >= Math.min(r.tz(), r.ez()) && z <= Math.max(r.tz(), r.ez());
+            boolean leg1;
+            if (r.hasLeg2()) {
+                leg1 = z == r.tz() && x >= Math.min(sx, r.cx()) && x <= Math.max(sx, r.cx());
+            } else {
+                leg1 = z == r.tz() && (r.side() > 0 ? x >= sx : x <= sx);
+            }
+            boolean leg2 = r.hasLeg2() && x == r.cx() && (r.ez() > r.tz() ? z >= r.tz() : z <= r.tz());
             if (!leg1 && !leg2) {
                 continue;
             }
@@ -170,19 +177,6 @@ public class RailData extends SavedData {
             }
             boolean powered = !corner && ((x + z) & 1) == 0;
             return new Plan(Kind.RAIL, shape, powered, 0, 0);
-        }
-        for (Route r : routes) {
-            int bx, bz;
-            if (r.hasLeg2()) {
-                bx = r.cx();
-                bz = r.ez() + Integer.signum(r.ez() - r.tz());
-            } else {
-                bx = r.cx() + r.side();
-                bz = r.tz();
-            }
-            if (x == bx && z == bz) {
-                return new Plan(Kind.BUFFER, null, false, 0, 0);
-            }
         }
         if (inStation(x, z)) {
             return new Plan(Kind.STATION, null, false, x - sx, z - sz);

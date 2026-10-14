@@ -22,5 +22,8 @@
   "item.armasreales.cuchillo": "Throwing Knife",
   "item.armasreales.fusil_dorado": "Golden Assault Rifle",
   "item.armasreales.cabeza_zombi": "Zombie Head",
-  "entity.armasreales.cuchillo_arrojadizo": "Thrown Knife"
+  "entity.armasreales.cuchillo_arrojadizo": "Thrown Knife",
+  "item.armasreales.tren_locomotora": "Locomotive (model)",
+  "item.armasreales.tren_vagon": "Wagon (model)",
+  "entity.armasreales.tren_vagon": "Train Car"
 }

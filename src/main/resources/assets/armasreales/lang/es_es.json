@@ -22,5 +22,8 @@
   "item.armasreales.cuchillo": "Cuchillo arrojadizo",
   "item.armasreales.fusil_dorado": "Fusil de asalto dorado",
   "item.armasreales.cabeza_zombi": "Cabeza de zombi",
-  "entity.armasreales.cuchillo_arrojadizo": "Cuchillo arrojadizo"
+  "entity.armasreales.cuchillo_arrojadizo": "Cuchillo arrojadizo",
+  "item.armasreales.tren_locomotora": "Locomotora (modelo)",
+  "item.armasreales.tren_vagon": "Vagón (modelo)",
+  "entity.armasreales.tren_vagon": "Vagón de tren"
 }

@@ -30,6 +30,9 @@ public class ClientSetup {
         // Rayos del láser y del plasma
         event.registerEntityRenderer(ModEntities.BEAM.get(), BeamRenderer::new);
 
+        // Tren
+        event.registerEntityRenderer(ModEntities.TRAIN_CAR.get(), com.example.armasreales.train.TrainCarRenderer::new);
+
         // Cuchillo arrojadizo
         event.registerEntityRenderer(ModEntities.KNIFE.get(), KnifeRenderer::new);
 

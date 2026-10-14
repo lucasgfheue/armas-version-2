@@ -92,4 +92,11 @@ public class ModItems {
             "cabeza_zombi",
             ZombieHeadItem::new,
             new Item.Properties().stacksTo(1).durability(250).attributes(ZombieHeadItem.attributes()));
+
+    /** Ítems "ocultos": solo existen para dar modelo 3D a la locomotora y al vagón del tren. */
+    public static final DeferredItem<Item> TREN_LOCOMOTORA = ITEMS.registerItem(
+            "tren_locomotora", Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TREN_VAGON = ITEMS.registerItem(
+            "tren_vagon", Item::new, new Item.Properties());
 }

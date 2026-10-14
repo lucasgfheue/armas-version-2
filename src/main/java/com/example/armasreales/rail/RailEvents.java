@@ -49,13 +49,14 @@ public class RailEvents {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
-        if (PENDING.isEmpty()) {
-            return;
-        }
         ServerLevel level = event.getServer().overworld();
         RailData data = RailData.get(level);
         if (!data.initialized) {
             PENDING.clear();
+            return;
+        }
+        com.example.armasreales.train.TrainManager.tick(level, data);
+        if (PENDING.isEmpty()) {
             return;
         }
         int built = 0;
@@ -108,6 +109,13 @@ public class RailEvents {
         } catch (Exception e) {
             LOGGER.error("No se pudo crear la estación de tren", e);
         }
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(net.neoforged.neoforge.event.server.ServerStoppedEvent event) {
+        PENDING.clear();
+        RETRIES.clear();
+        com.example.armasreales.train.TrainManager.clear();
     }
 
     // ------------------------------------------------------------------ creación
@@ -185,7 +193,7 @@ public class RailEvents {
         player.teleportTo(level, sx + 0.5, data.deckY + 1, sz + 0.5, player.getYRot(), player.getXRot());
         player.setRespawnPosition(Level.OVERWORLD, station, 0.0f, true, false);
         player.sendSystemMessage(Component.literal(
-                "Bienvenido a la estación. Subite a una vagoneta: las vías llevan a las aldeas (usá /estacion para volver)."));
+                "Bienvenido a la estación. Cada 10 minutos pasa un tren (clic derecho para subir). Las vías no terminan nunca y pasan por las aldeas. /estacion te trae de vuelta."));
     }
 
     private static RailData.Route routeFor(int sx, int trackZ, int side, BlockPos village) {
@@ -209,7 +217,7 @@ public class RailEvents {
             if (village == null) {
                 continue;
             }
-            if ((village.getX() - sx) * side < 60) {
+            if ((village.getX() - sx) * side < 150) {
                 continue;
             }
             boolean duplicate = false;
