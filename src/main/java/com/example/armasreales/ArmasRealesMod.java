@@ -18,7 +18,9 @@ public class ArmasRealesMod {
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        event.registrar("1").playToServer(FirePayload.TYPE, FirePayload.STREAM_CODEC, FirePayload::handle);
+        event.registrar("1")
+                .playToServer(FirePayload.TYPE, FirePayload.STREAM_CODEC, FirePayload::handle)
+                .playToServer(TankFirePayload.TYPE, TankFirePayload.STREAM_CODEC, TankFirePayload::handle);
     }
 
     private void addToCreativeTabs(BuildCreativeModeTabContentsEvent event) {
@@ -40,6 +42,8 @@ public class ArmasRealesMod {
             event.accept(ModItems.FUSIL_DORADO);
             event.accept(ModItems.CUCHILLO);
             event.accept(ModItems.CABEZA_ZOMBI);
+            event.accept(ModItems.TANQUE);
+            event.accept(ModItems.OBUS_TANQUE);
         }
     }
 }

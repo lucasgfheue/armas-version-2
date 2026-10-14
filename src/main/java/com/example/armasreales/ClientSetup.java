@@ -33,6 +33,11 @@ public class ClientSetup {
         // Tren
         event.registerEntityRenderer(ModEntities.TRAIN_CAR.get(), com.example.armasreales.train.TrainCarRenderer::new);
 
+        // Tanque y su obús
+        event.registerEntityRenderer(ModEntities.TANK.get(), TankRenderer::new);
+        event.registerEntityRenderer(ModEntities.TANK_SHELL.get(),
+                context -> new ThrownItemRenderer<>(context, 2.0F, false));
+
         // Cuchillo arrojadizo
         event.registerEntityRenderer(ModEntities.KNIFE.get(), KnifeRenderer::new);
 

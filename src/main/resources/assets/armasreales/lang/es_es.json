@@ -25,5 +25,9 @@
   "entity.armasreales.cuchillo_arrojadizo": "Cuchillo arrojadizo",
   "item.armasreales.tren_locomotora": "Locomotora (modelo)",
   "item.armasreales.tren_vagon": "Vagón (modelo)",
-  "entity.armasreales.tren_vagon": "Vagón de tren"
+  "entity.armasreales.tren_vagon": "Vagón de tren",
+  "item.armasreales.tanque": "Tanque",
+  "item.armasreales.obus_tanque": "Obús de tanque",
+  "entity.armasreales.tanque": "Tanque",
+  "entity.armasreales.obus_tanque": "Obús de tanque"
 }

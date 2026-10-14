@@ -99,4 +99,17 @@ public class ModItems {
 
     public static final DeferredItem<Item> TREN_VAGON = ITEMS.registerItem(
             "tren_vagon", Item::new, new Item.Properties());
+
+    public static final DeferredItem<TankItem> TANQUE = ITEMS.registerItem(
+            "tanque", TankItem::new, new Item.Properties().stacksTo(1));
+
+    public static final DeferredItem<Item> OBUS_TANQUE = ITEMS.registerItem(
+            "obus_tanque", Item::new, new Item.Properties());
+
+    /** Ítems "ocultos": solo dan modelo 3D al casco y a la torreta del tanque. */
+    public static final DeferredItem<Item> TANQUE_CASCO = ITEMS.registerItem(
+            "tanque_casco", Item::new, new Item.Properties());
+
+    public static final DeferredItem<Item> TANQUE_TORRETA = ITEMS.registerItem(
+            "tanque_torreta", Item::new, new Item.Properties());
 }

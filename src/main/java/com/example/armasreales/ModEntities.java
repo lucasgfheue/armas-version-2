@@ -61,6 +61,22 @@ public class ModEntities {
                             .fireImmune()
                             .build("tren_vagon"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<TankEntity>> TANK =
+            ENTITIES.register("tanque", () ->
+                    EntityType.Builder.<TankEntity>of(TankEntity::new, MobCategory.MISC)
+                            .sized(2.5f, 1.2f)
+                            .clientTrackingRange(10)
+                            .updateInterval(1)
+                            .build("tanque"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<TankShell>> TANK_SHELL =
+            ENTITIES.register("obus_tanque", () ->
+                    EntityType.Builder.<TankShell>of(TankShell::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f)
+                            .clientTrackingRange(8)
+                            .updateInterval(2)
+                            .build("obus_tanque"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<BeamEntity>> BEAM =
             ENTITIES.register("rayo", () ->
                     EntityType.Builder.<BeamEntity>of(BeamEntity::new, MobCategory.MISC)

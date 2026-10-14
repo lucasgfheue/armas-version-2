@@ -25,5 +25,9 @@
   "entity.armasreales.cuchillo_arrojadizo": "Thrown Knife",
   "item.armasreales.tren_locomotora": "Locomotive (model)",
   "item.armasreales.tren_vagon": "Wagon (model)",
-  "entity.armasreales.tren_vagon": "Train Car"
+  "entity.armasreales.tren_vagon": "Train Car",
+  "item.armasreales.tanque": "Tank",
+  "item.armasreales.obus_tanque": "Tank Shell",
+  "entity.armasreales.tanque": "Tank",
+  "entity.armasreales.obus_tanque": "Tank Shell"
 }
